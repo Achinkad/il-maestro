@@ -8,9 +8,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('router_user', function (Blueprint $table) {
-            $table->unsignedBigInteger('router_id');
-                $table->foreign('router_id')->references('id')->on('routers')->onDelete("cascade");
+        Schema::create('master_nodes_user', function (Blueprint $table) {
+            $table->unsignedBigInteger('master_nodes_id');
+                $table->foreign('master_nodes_id')->references('id')->on('master_nodess')->onDelete("cascade");
             $table->unsignedBigInteger('user_id');
                 $table->foreign('user_id')->references('id')->on('users')->onDelete("cascade");
         });
@@ -18,6 +18,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('router_user');
+        Schema::dropIfExists('master_nodes_user');
     }
 };

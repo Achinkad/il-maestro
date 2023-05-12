@@ -10,10 +10,10 @@ class Router extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ssid',
+        'name',
         'ip_address',
-        'mac_address',
-        'authorization'
+        'port',
+        'token'
     ];
 
     public function user() {
