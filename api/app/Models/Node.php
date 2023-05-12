@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Router extends Model
+class Node extends Model
 {
     use HasFactory;
 
@@ -17,7 +17,7 @@ class Router extends Model
     ];
 
     public function user() {
-        return $this->belongsToMany(User::class, 'router_user', 'router_id', 'user_id')
-            ->withPivot('router_id', 'user_id');
+        return $this->belongsToMany(User::class, 'node_user', 'node_id', 'user_id')
+            ->withPivot('node_id', 'user_id');
     }
 }

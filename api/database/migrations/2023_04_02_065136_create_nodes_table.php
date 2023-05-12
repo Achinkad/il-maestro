@@ -8,18 +8,18 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('master_nodes', function (Blueprint $table) {
+        Schema::create('nodes', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
             $table->string('ip_address');
             $table->string('port')->nullable();
-            $table->string('token');
+            $table->longText('token');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('master_nodes');
+        Schema::dropIfExists('nodes');
     }
 };
