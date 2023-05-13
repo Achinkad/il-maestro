@@ -8,7 +8,7 @@ export const useNodeStore = defineStore('node', () => {
     const masterNodes = ref([]) // Master Nodes
 
     async function loadMasterNodes() {
-        await axiosApi.get('nodes').then(response => {
+        await axiosApi.get('nodes/master').then(response => {
             masterNodes.value = response.data
         }).catch(error => {
             notyf.error(error.response.data + " (" + error.response.status + ")")

@@ -62,10 +62,10 @@ onBeforeMount(() => {
                                 <thead class="table-light">
                                     <tr>
                                         <th style="width:8%">#ID</th>
-                                        <th style="width:18%">Name</th>
-                                        <th style="width:18%">IP Address</th>
+                                        <th style="width:18%">Node name</th>
+                                        <th style="width:18%">IP address</th>
                                         <th style="width:15%">Port</th>
-                                        <th>Bearer Token</th>
+                                        <th>Bearer token</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -95,12 +95,12 @@ onBeforeMount(() => {
                 <div class="card-body pt-0">
                     <form class="row g-3 needs-validation" @submit.prevent="registerMasterNode">
                         <div class="col-4">
-                            <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                            <label for="name" class="form-label">Node name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" placeholder="Enter a name"
                             v-model="masterNode.name" required>
                         </div>
                         <div class="col-4">
-                            <label for="ip_address" class="form-label">IP Address <span class="text-danger">*</span></label>
+                            <label for="ip_address" class="form-label">IP address <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="ip_address" placeholder="Enter an IP address"
                             pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
                             v-model="masterNode.ip_address" required>
@@ -111,7 +111,7 @@ onBeforeMount(() => {
                             v-model="masterNode.port" required>
                         </div>
                         <div class="col-12">
-                            <label for="token" class="form-label">Bearer Token <span class="text-danger">*</span></label>
+                            <label for="token" class="form-label">Bearer token <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="token"
                             placeholder="Enter a bearer token" v-model="masterNode.token" required>
                         </div>

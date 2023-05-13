@@ -25,4 +25,17 @@ class NodeController extends Controller
         $currentUser->node()->attach($node->id);
         return new NodeResource($node);
     }
+
+    public function getAllNodes(Request $request)
+    {
+        $nodeMaster = Node::where('id', $request->id)->firstOrFail();
+
+        try {
+            $nodes = Helper::httpClient('GET', 'v1/nodes', $nodeMaster);
+        } catch (\Exception $e) {
+            return response()->json($e->getMessage(), $e->getCode());
+        }
+
+        return $nodes;
+    }
 }

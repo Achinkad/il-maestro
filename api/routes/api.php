@@ -15,5 +15,6 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
 
 /* --- [API Routes] -> Nodes --- */
-Route::get('nodes', [NodeController::class, 'getMasterNodes']);
+Route::get('nodes', [NodeController::class, 'getAllNodes']);
+Route::get('nodes/master', [NodeController::class, 'getMasterNodes']);
 Route::post('nodes/create', [NodeController::class, 'registerMasterNode']);
