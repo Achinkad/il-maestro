@@ -22,23 +22,22 @@ const router = useRouter()
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link class="nav-link" :class="{ active: $route.name === 'MasterNodes' }" :to="{ name: 'MasterNodes' }">
-                            <i class="bi bi-diagram-3" style="position:relative;bottom:1px;"></i>
-                            Master Nodes
-                        </router-link>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarIP" aria-expanded="false" aria-controls="sidebarIP">
-                            <i class="bi bi-diagram-3"></i> Link 02
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarNodes" aria-expanded="false" aria-controls="sidebarNodes"
+                        :class="{ active: $route.name === 'Nodes' || $route.name === 'MasterNodes' }">
+                            <i class="bi bi-diagram-3" style="position:relative;bottom:1px;"></i> Clusters Nodes
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
-                        <div class="collapse" id="sidebarIP">
+                        <div class="collapse" id="sidebarNodes">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="#" class="nav-link">Link 03</a>
+                                    <router-link class="nav-link" :class="{ active: $route.name === 'Nodes' }" :to="{ name: 'Nodes' }">
+                                        All Nodes
+                                    </router-link>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link">Link 04</a>
+                                    <router-link class="nav-link" :class="{ active: $route.name === 'MasterNodes' }" :to="{ name: 'MasterNodes' }">
+                                        Master Nodes
+                                    </router-link>
                                 </li>
                             </ul>
                         </div>

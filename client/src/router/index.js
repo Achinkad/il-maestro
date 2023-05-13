@@ -15,6 +15,11 @@ const router = createRouter({
             component: () => import('../views/Nodes/MasterNodes.vue')
         },
         {
+            path: '/nodes',
+            name: 'Nodes',
+            component: () => import('../views/Nodes/Nodes.vue')
+        },
+        {
             path: '/login',
             name: 'Login',
             component: () => import('../views/Login.vue')

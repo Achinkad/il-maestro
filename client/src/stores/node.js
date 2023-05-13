@@ -5,6 +5,7 @@ export const useNodeStore = defineStore('node', () => {
     const axiosApi = inject('axiosApi') // Axios
     const notyf = inject('notyf') // Notyf
 
+    const nodes = ref([]) // Nodes
     const masterNodes = ref([]) // Master Nodes
 
     async function loadMasterNodes() {
@@ -16,6 +17,16 @@ export const useNodeStore = defineStore('node', () => {
     }
 
     const getMasterNodes = (() => { return masterNodes.value })
+
+    async function loadNodes(body) {
+        await axiosApi.get('nodes', { params: body }).then(response => {
+            nodes.value = response.data
+        }).catch(error => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
+    const getNodes = (() => { return nodes.value })
 
     async function registerMasterNode(data) {
         await axiosApi.post('nodes/create', data).then((response) => {
@@ -29,6 +40,8 @@ export const useNodeStore = defineStore('node', () => {
     return {
         loadMasterNodes,
         getMasterNodes,
+        loadNodes,
+        getNodes,
         registerMasterNode
     }
 })

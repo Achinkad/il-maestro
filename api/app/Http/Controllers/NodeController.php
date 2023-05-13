@@ -9,11 +9,41 @@ use App\Models\Node;
 use App\Http\Requests\StoreNodeRequest;
 use App\Http\Resources\NodeResource;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Response;
+
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ConnectException;
+
 class NodeController extends Controller
 {
     public function getMasterNodes()
     {
-        return Node::all();
+        $masterNodes = Node::all();
+
+        $client = new Client(['verify' => false]);
+        
+        foreach ($masterNodes as $node) {
+            $URL = 'https://' . $node->ip_address . ':' . $node->port;
+
+            $headerOptions = [
+                'Authorization' => 'Bearer ' . $node->token,
+            ];
+
+            try {
+                $response = $client->request('GET', $URL, [
+                    'headers' => $headerOptions,
+                    'timeout' => 0.8
+                ]);
+
+                $node->disabled = false;
+            } catch (ConnectException $e) {
+                $node->disabled = true;
+            }
+        }
+
+        return $masterNodes;
     }
 
     public function registerMasterNode(StoreNodeRequest $request)
