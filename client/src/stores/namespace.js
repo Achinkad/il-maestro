@@ -9,21 +9,15 @@ export const useNamespaceStore = defineStore('namespace', () => {
     // Array of interfaces
     const namespaces = ref([])
     
+    async function loadNamespaces(id){
 
-    async function loadNamespaces(identifier){
-
-        
-        await axiosApi.get('routers/interfaces',
-        {
-            params:{
-                identifier: identifier.value,
-                
-            }
-        }).then((response) => {
-            namespaces.value = response.data;
+        await axiosApi.get('namespaces', { params: id })
+        .then((response) => {
+            namespaces.value = response.data
             
         }).catch(error => {
-            notyf.error(error.response.data + " (" + error.response.status + ")")
+            console.log(error)
+            //notyf.error(error.response.data + " (" + error.response.status + ")")
         })
        
     }
@@ -33,8 +27,6 @@ export const useNamespaceStore = defineStore('namespace', () => {
     })
 
     
-
-
     return {
         loadNamespaces,
         getNamespaces,

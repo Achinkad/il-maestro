@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Node;
 use App\Helper\Helper;
 use Illuminate\Http\Request;
 
 class NamespaceController extends Controller
 {
-    public function showNamespaces(Request $request)
+    public function getNamespaces(Request $request)
     {
-              
-        $master=Router::where('id',$request->identifier)->firstOrFail();
-           
+
+        $nodeMaster = Node::where('id', $request->id)->firstOrFail();
         
-        try{
-            $namespaces = Helper::httpClient('GET','interface',$master);
+        try {
+            $namespaces = Helper::httpClient('GET', 'v1/namespaces', $nodeMaster);
+            
         } catch (\Exception $e) {
+            
             return response()->json($e->getMessage(), $e->getCode());
         }
-                   
 
         return $namespaces;
         

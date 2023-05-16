@@ -1,119 +1,133 @@
 <script setup>
 import { inject,onBeforeMount,ref,computed,watch } from 'vue'
-import { useInterfaceStore } from "../stores/interface.js"
-import { useRouterStore } from "../stores/router.js"
+import { useNodeStore } from '../../stores/node.js'
+import { useNamespaceStore } from '../../stores/namespace.js'
 
-const routerStore = useRouterStore()
-const interfaceStore = useInterfaceStore()
+const namespaceStore = useNamespaceStore()
+const nodeStore = useNodeStore()
 
 const axiosApi = inject('axiosApi')
 
-var router_interfaces = ref("-")
-var type_interfaces = ref("all")
+const masterNodeID = ref(null) // Master Node ID
 
-const loadRouters = (() => { routerStore.loadRouters() })
-const routers = computed(() => { return routerStore.getRouters() })
-const loadInterfaces = (() => { interfaceStore.loadInterfaces(router_interfaces,type_interfaces) })
-const interfaces = computed(() => { return interfaceStore.getInterfaces() })
+const loadMasterNodes = (() => { nodeStore.loadMasterNodes() })
+const masterNodes = computed(() => { return nodeStore.getMasterNodes() })
 
+const loadNamespaces = ((data) => { namespaceStore.loadNamespaces(data) })
+const namespaces = computed(() => { return namespaceStore.getNamespaces() })
 
-
-watch(router_interfaces, () => {
-    loadInterfaces()
+//Load Namespaces
+watch(masterNodeID, () => {
+    let data = { id: masterNodeID.value }
+    loadNamespaces(data)
 })
 
-watch(type_interfaces, () => {
-
-    loadInterfaces()
-})
-
+// Get All Master Nodes
 onBeforeMount(() => {
-    loadRouters()
-
+    loadMasterNodes()
 })
 
 </script>
 
 <template>
-    <div class="row">
+     <div class="row">
         <div class="col-12">
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
-                    <select class="form-select" v-model="router_interfaces">
-                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a master</option>
-                        <option value="-" selected hidden disabled v-else>Loading masters...</option>
-                        <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
+                    <select class="form-select" v-model="masterNodeID">
+                        <option value="null" selected hidden disabled v-if="masterNodes.length > 0">Select a master node</option>
+                        <option value="null" selected hidden disabled v-else>Loading master nodes...</option>
+                        <option v-for="node in masterNodes" :key="node.id" :value="node.id" :disabled="node.disabled">{{ node.ip_address }}</option>
                     </select>
                 </div>
-                <h2 class="p-title">Namespaces </h2>
+                <h2 class="p-title">Namespaces</h2>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
-            <div class="card card-h-100">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">List of all available namespaces</h4>
-                    <div class="d-flex justify-content-end" v-if="router_interfaces != '-'">
-                        <div class="row align-items-center">
-                            <div class="col-auto">
-                                <label for="type_interfaces" class="form-label mb-0">Type:</label>
-                            </div>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-h-100">
+                        <div class="d-flex card-header justify-content-between align-items-center">
+                            <h4 class="header-title">Registered Namespaces</h4>
+                        </div>
+                        <div class="card-body pt-0">
+                            <table class="table table-responsive align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th >Name</th>
+                                        <th >Resouce Version</th>
+                                        <th >Creation Time</th>
+                                        <th>Manager</th>
+                                        <th class="text-center" style="width:18%">Active</th>
+                                        <th class="text-center" style="width:18%">Actions</th>
+                                       
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-if="namespaces.length == 0">
+                                        <td colspan="6" class="text-center" style="height:55px!important;">There are no Namespaces registered in the system.</td>
+                                    </tr>
+                                    <tr v-for="namespace in namespaces.items" :key="namespace.id">
+                                        <td>{{namespace.metadata.name}}</td>
+                                        <td>{{namespace.metadata.resourceVersion}}</td>
+                                        <td>{{namespace.metadata.creationTimestamp}}</td>
+                                        <td>{{namespace.metadata.managedFields[0].manager}}</td>
+                                        <td v-if="namespace.status.phase!='Active'" class="text-center">
+                                            <span class="badge badge-danger-lighten">Disabled</span>
+                                        </td>
+                                        <td v-else class="text-center">
+                                            <span class="badge badge-success-lighten">Active</span>
+                                        </td> 
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center">
+                                                <button class="btn btn-xs btn-light table-button" title="Delete">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="card card-h-100">
+                <div class="d-flex card-header justify-content-between align-items-center">
+                    <h4 class="header-title">Register a new namespace</h4>
+                </div>
                 <div class="card-body pt-0">
-                    <table class="table table-responsive align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Name</th>
-                                <th>Manager</th>
-                                <th>API Version</th>
-                                <th class="text-center">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-if="namespaces.length==0">
-                                <td colspan="8" class="text-center" style="height:55px!important;">There are no namespaces.</td>
-                            </tr>
-                            <tr v-for="namespace in namespaces">
-
-                                <td class="text-center" v-if="namespace->id==undefined" style="height:55px!important;"> -</td>
-                                <td class="text-center" style="height:55px!important;">{{iface['.id'].substring(1)}}</td>
-
-                                <td v-if="iface.name==undefined"> -</td>
-                                <td v-else>{{iface.name}}</td>
-
-                                <td v-if="iface.type==undefined"> -</td>
-                                <td v-else>{{iface.type}}</td>
-
-                                <td v-if="iface['actual-mtu']==undefined"> -</td>
-                                <td v-else>{{iface['actual-mtu']}}</td>
-
-                                <td v-if="iface.l2mtu==undefined"> -</td>
-                                <td v-else>{{iface.l2mtu}}</td>
-
-                                <td v-if="iface['rx-byte']==undefined"> -</td>
-                                <td v-else>{{iface['rx-byte']}} kbps</td>
-
-                                <td v-if="iface['tx-byte']==undefined"> -</td>
-                                <td v-else>{{iface['tx-byte']}} kbps</td>
-
-                                <td class="text-center" v-if="iface.disabled==undefined">
-                                    <span class="badge badge-success-lighten">Active</span>
-                                </td>
-
-                                <td class="text-center" v-if="iface.disabled=='false'">
-                                    <span class="badge badge-success-lighten">Active</span>
-                                </td>
-
-                                <td class="text-center" v-if="iface.disabled=='true'">
-                                    <span class="badge badge-danger-lighten">Disabled</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
+                    <form class="row g-3 needs-validation" @submit.prevent="registerNamespaces">
+                        <div class="col-4">
+                            <label for="name" class="form-label">Node name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter a name"
+                             required>
+                        </div>
+                        <div class="col-4">
+                            <label for="ip_address" class="form-label">IP address <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="ip_address" placeholder="Enter an IP address"
+                            pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                            required>
+                        </div>
+                        <div class="col-4">
+                            <label for="port" class="form-label">Port <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="port" placeholder="Enter a port"
+                             required>
+                        </div>
+                    
+                        <div class="col-12 mt-4 d-flex justify-content-end">
+                            <div class="px-1">
+                                <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
+                            </div>
+                            <div class="px-1">
+                                <button type="submit" class="btn btn-primary">Register Namespace</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
