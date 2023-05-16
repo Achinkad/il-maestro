@@ -18,3 +18,4 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api')
 Route::get('nodes', [NodeController::class, 'getAllNodes']);
 Route::get('nodes/master', [NodeController::class, 'getMasterNodes']);
 Route::post('nodes/create', [NodeController::class, 'registerMasterNode']);
+Route::delete('nodes/delete/{id}', [NodeController::class, 'deleteMasterNode']);

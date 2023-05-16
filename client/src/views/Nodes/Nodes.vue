@@ -7,7 +7,8 @@ const notyf = inject('notyf')
 
 const nodeStore = useNodeStore()
 
-const masterNodeID = ref(null) // Master Node ID
+const masterNodeID = ref(null) // Master node ID
+const selectedMasterNode = ref(null) // Selected master node
 
 const loadMasterNodes = (() => { nodeStore.loadMasterNodes() })
 const masterNodes = computed(() => { return nodeStore.getMasterNodes() })
@@ -20,6 +21,9 @@ const copy = ((node) => {
     navigator.clipboard.writeText(node.token)
     notyf.open({type: 'info', message: 'The bearer token is now on your clipboard. Go paste it!'})
 })
+
+// Show master node details
+const masterNodeDetails = ((masterNode) => { selectedMasterNode.value = masterNode })
 
 // Get all master nodes
 onBeforeMount(() => {
@@ -57,7 +61,6 @@ watch(masterNodeID, () => {
                             <h4 class="header-title">All nodes</h4>
                         </div>
                         <div class="card-body pt-0">
-                            <!-- {{ nodes.items[1].metadata.name }} -->
                             <table class="table table-responsive align-middle">
                                 <thead class="table-light">
                                     <tr>
@@ -70,7 +73,7 @@ watch(masterNodeID, () => {
                                 </thead>
                                 <tbody>
                                     <tr v-if="nodes.length == 0">
-                                        <td colspan="5" class="text-center" style="height:55px!important;">There are no master nodes registered in the system.</td>
+                                        <td colspan="5" class="text-center" style="height:55px!important;">Please, select a master node to see all the nodes.</td>
                                     </tr>
                                     <tr v-for="node in nodes.items" :key="node.id">
                                         <td>{{ node.metadata.name }}</td>
@@ -79,7 +82,7 @@ watch(masterNodeID, () => {
                                         <td>{{ node.metadata.uid }}</td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
-                                                <button class="btn btn-xs btn-light table-button" title="Edit">
+                                                <button class="btn btn-xs btn-light table-button" title="View more details" @click="masterNodeDetails(node)">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
                                             </div>
@@ -93,13 +96,23 @@ watch(masterNodeID, () => {
             </div>
         </div>
         <div class="col-md-5">
-            <div class="card card-h-100">
+            <div class="card card-h-100" v-if="selectedMasterNode">
                 <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Node details</h4>
+                    <h4 class="header-title">Details about the node {{ selectedMasterNode.metadata.name }}</h4>
                 </div>
                 <div class="card-body pt-0">
-                    <p>Form here.</p>
+                    <p><b>Hostname:</b> {{ selectedMasterNode.metadata.name }}</p>
+                    <p><b>IP Address:</b> {{ selectedMasterNode.status.addresses[0].address }}</p>
+                    <p><b>Port:</b> 6443</p>
+                    <p><b>UID:</b> {{ selectedMasterNode.metadata.uid }}</p>
+                    <p><b>Machine ID:</b> {{ selectedMasterNode.status.nodeInfo.machineID }}</p>
+                    <p><b>System UID:</b> {{ selectedMasterNode.status.nodeInfo.systemUUID }}</p>
+                    <p><b>OS Image:</b> {{ selectedMasterNode.status.nodeInfo.osImage }}</p>
+                    <p><b>Kernel Version:</b> {{ selectedMasterNode.status.nodeInfo.kernelVersion }}</p>
                 </div>
+            </div>
+            <div class="callout mt-0" v-if="!selectedMasterNode">
+                <b>Note:</b> Click in the eye icon to view more details about a node.
             </div>
         </div>
     </div>

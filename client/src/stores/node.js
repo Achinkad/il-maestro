@@ -37,11 +37,25 @@ export const useNodeStore = defineStore('node', () => {
         })
     }
 
+    async function deleteMasterNode(masterNode) {
+        await axiosApi.delete('nodes/delete/' + masterNode.id).then(response => {
+            notyf.success('The master node was deleted with success.')
+
+            // Remove from the array of master nodes
+            let index = masterNodes.value.indexOf(masterNode)
+            if (index > -1) masterNodes.value.splice(index, 1)
+
+        }).catch((error) => {
+            notyf.error(error.response.data + " (" + error.response.status + ")")
+        })
+    }
+
     return {
         loadMasterNodes,
         getMasterNodes,
         loadNodes,
         getNodes,
-        registerMasterNode
+        registerMasterNode,
+        deleteMasterNode
     }
 })
