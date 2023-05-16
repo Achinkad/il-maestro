@@ -38,6 +38,23 @@ const copy = ((node) => {
     notyf.open({type: 'info', message: 'The bearer token is now on your clipboard. Go paste it!'})
 })
 
+const downloadScript = (() => {
+    axiosApi.get('nodes/download-script').then((response) => {
+        let fileURL = window.URL.createObjectURL(new Blob([response.data]))
+        let fileLink = document.createElement('a')
+
+        fileLink.href = fileURL
+        fileLink.setAttribute('download', 'script.zip')
+        document.body.appendChild(fileLink)
+        fileLink.click()
+
+        notyf.success('The script was downloaded with success.')
+    }).catch((error) => {
+        console.log(error)
+        notyf.error('Oops, an error has occurred.')
+    })
+})
+
 // Get All Master Nodes
 onBeforeMount(() => {
     loadMasterNodes()
@@ -138,7 +155,11 @@ onBeforeMount(() => {
                 </div>
             </div>
             <div class="callout">
-                <b>Note:</b> Put here the script to retrieve the bearer token.
+                <b>Note:</b> If you do not possess a bearer token or wish to obtain the one you
+                already got, you can <span @click="downloadScript()" style="cursor:pointer;
+                text-decoration:underline;">click here</span> to download the script and execute it
+                on your cluster's master node for token retrieval. This script also enables you to
+                authorize access to the REST API by granting permissions.
             </div>
         </div>
     </div>
