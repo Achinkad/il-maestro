@@ -2,7 +2,7 @@
 
 namespace App\Helper;
 
-use App\Models\Router;
+use App\Models\Node;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
@@ -13,33 +13,27 @@ use GuzzleHttp\Exception\ConnectException;
 
 class Helper
 {
-    // Decodes a given base64 enconded string
-    public static function authorizationDecode(String $token) : Array
-    {
-        return explode(":", base64_decode($token));
-    }
-
     // Creates a new HTTP client and sends a request
-    public static function httpClient(String $httpRequestMethod, String $local, Router $router, Array $bodyContent = null)
+    public static function httpClient(String $httpRequestMethod, String $local, Node $nodeMaster, Array $bodyContent = null)
     {
-        $client = new Client(['verify' => false]);
 
-        $completeUrl = 'https://' . $router->ip_address . '/rest/' . $local;
+        $clientHTTP = new Client(['verify' => false]);
+
+        $URL = 'https://' . $nodeMaster->ip_address . ':' . $nodeMaster->port . '/api/' . $local;
 
         $headerOptions = [
-            'Authorization' => 'Basic ' . $router->authorization,
-            'Content-Type' => 'application/json'
+            'Authorization' => 'Bearer ' . $nodeMaster->token,
         ];
 
         try {
             if ($bodyContent) {
-                $response = $client->request($httpRequestMethod, $completeUrl, [
+                $response = $clientHTTP->request($httpRequestMethod, $URL, [
                     'headers' => $headerOptions,
                     'json' => $bodyContent,
                     'timeout' => 3
                 ]);
             } else {
-                $response = $client->request($httpRequestMethod, $completeUrl, [
+                $response = $clientHTTP->request($httpRequestMethod, $URL, [
                     'headers' => $headerOptions,
                     'timeout' => 3
                 ]);

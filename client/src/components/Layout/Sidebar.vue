@@ -56,13 +56,17 @@ const router = useRouter()
                             <i class="bi bi-diagram-3"></i> exemplo
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
-                        <div class="collapse" id="sidebarIP">
+                        <div class="collapse" id="sidebarNodes">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="#" class="nav-link">exemplo 01</a>
+                                    <router-link class="nav-link" :class="{ active: $route.name === 'Nodes' }" :to="{ name: 'Nodes' }">
+                                        All Nodes
+                                    </router-link>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link">exemplo 02</a>
+                                    <router-link class="nav-link" :class="{ active: $route.name === 'MasterNodes' }" :to="{ name: 'MasterNodes' }">
+                                        Master Nodes
+                                    </router-link>
                                 </li>
                             </ul>
                         </div>
