@@ -20,6 +20,11 @@ const router = createRouter({
             component: () => import('../views/Nodes/Nodes.vue')
         },
         {
+            path: '/namespaces',
+            name: 'Namespaces',
+            component: () => import('../views/Namespaces/Namespaces.vue')
+        },
+        {
             path: '/login',
             name: 'Login',
             component: () => import('../views/Login.vue')
