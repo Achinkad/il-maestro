@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\Helper;
 use Illuminate\Http\Request;
 
 class NamespaceController extends Controller
@@ -9,15 +10,15 @@ class NamespaceController extends Controller
     public function showNamespaces(Request $request)
     {
               
-        //$router=Router::where('id',$request->identifier)->firstOrFail();
+        $master=Router::where('id',$request->identifier)->firstOrFail();
            
         
         try{
-            $namespaces = Helper::httpClient('GET','interface',$router);
+            $namespaces = Helper::httpClient('GET','interface',$master);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
-                                   
+                   
 
         return $namespaces;
         

@@ -23,22 +23,46 @@ const router = useRouter()
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
+                            <i class="bi bi-gear"></i>
+                            Nodes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-square"></i>
+                            Namespaces
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-box-fill"></i>
+                            Pods
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
                             <i class="bi bi-diagram-3"></i>
-                            Link 01
+                            Services
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="bi bi-arrow-clockwise"></i>
+                            Deployments
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarIP" aria-expanded="false" aria-controls="sidebarIP">
-                            <i class="bi bi-diagram-3"></i> Link 02
+                            <i class="bi bi-diagram-3"></i> exemplo
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
                         <div class="collapse" id="sidebarIP">
                             <ul class="side-nav-second-level">
                                 <li>
-                                    <a href="#" class="nav-link">Link 03</a>
+                                    <a href="#" class="nav-link">exemplo 01</a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link">Link 04</a>
+                                    <a href="#" class="nav-link">exemplo 02</a>
                                 </li>
                             </ul>
                         </div>

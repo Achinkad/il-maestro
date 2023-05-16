@@ -40,8 +40,8 @@ onBeforeMount(() => {
             <div class="p-title-box">
                 <div class="p-title-right" style="width:15%;">
                     <select class="form-select" v-model="router_interfaces">
-                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a router</option>
-                        <option value="-" selected hidden disabled v-else>Loading routers...</option>
+                        <option value="-" selected hidden disabled v-if="routers.length > 0">Select a master</option>
+                        <option value="-" selected hidden disabled v-else>Loading masters...</option>
                         <option v-for="router in routers" :key="router.id" :value="router.id" :disabled="router.disabled">{{ router.ip_address }}</option>
                     </select>
                 </div>
@@ -66,23 +66,19 @@ onBeforeMount(() => {
                     <table class="table table-responsive align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th class="text-center" style="width:5%">#ID</th>
                                 <th>Name</th>
-                                <th>Type</th>
-                                <th>Actual MTU</th>
-                                <th>L2 MTU</th>
-                                <th>TX</th>
-                                <th>RX</th>
+                                <th>Manager</th>
+                                <th>API Version</th>
                                 <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="interfaces.length==0">
-                                <td colspan="8" class="text-center" style="height:55px!important;">There are no interfaces.</td>
+                            <tr v-if="namespaces.length==0">
+                                <td colspan="8" class="text-center" style="height:55px!important;">There are no namespaces.</td>
                             </tr>
-                            <tr v-for="iface in interfaces">
+                            <tr v-for="namespace in namespaces">
 
-                                <td class="text-center" v-if="iface['.id']==undefined" style="height:55px!important;"> -</td>
+                                <td class="text-center" v-if="namespace->id==undefined" style="height:55px!important;"> -</td>
                                 <td class="text-center" style="height:55px!important;">{{iface['.id'].substring(1)}}</td>
 
                                 <td v-if="iface.name==undefined"> -</td>
