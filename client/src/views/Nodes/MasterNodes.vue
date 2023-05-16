@@ -29,6 +29,9 @@ const registerMasterNode = () => {
     Object.entries(masterNode.value).forEach(([i]) => { masterNode.value[i] = null })
 }
 
+// Delete master node
+const deleteMasterNode = ((masterNode) => { nodeStore.deleteMasterNode(masterNode) })
+
 // Copy bearer token into the clipboard
 const copy = ((node) => {
     navigator.clipboard.writeText(node.token)
@@ -64,8 +67,9 @@ onBeforeMount(() => {
                                         <th style="width:8%">#ID</th>
                                         <th style="width:18%">Node name</th>
                                         <th style="width:18%">IP address</th>
-                                        <th style="width:15%">Port</th>
+                                        <th style="width:12%">Port</th>
                                         <th>Bearer token</th>
+                                        <th class="text-center" style="width:15%">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,6 +83,13 @@ onBeforeMount(() => {
                                         <td>{{ node.port }}</td>
                                         <td style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:1px; cursor:pointer;"
                                             @click="copy(node)" title="Click to copy to your clipboard!"><u>{{ node.token }}</u></td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center">
+                                                <button class="btn btn-xs btn-light table-button" title="Delete master node" @click="deleteMasterNode(node)">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -23,7 +23,7 @@ class NodeController extends Controller
         $masterNodes = Node::all();
 
         $client = new Client(['verify' => false]);
-        
+
         foreach ($masterNodes as $node) {
             $URL = 'https://' . $node->ip_address . ':' . $node->port;
 
@@ -67,5 +67,10 @@ class NodeController extends Controller
         }
 
         return $nodes;
+    }
+
+    public function deleteMasterNode(Request $request)
+    {
+        return Node::where('id', $request->route('id'))->delete();
     }
 }

@@ -27,3 +27,4 @@ Route::get('namespaces', [NamespaceController::class, 'getNamespaces']);
 
 
 
+Route::delete('nodes/delete/{id}', [NodeController::class, 'deleteMasterNode']);
