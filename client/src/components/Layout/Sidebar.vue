@@ -22,12 +22,6 @@ const router = useRouter()
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="bi bi-gear"></i>
-                            Nodes
-                        </a>
-                    </li>
-                    <li class="nav-item">
                     
                        <router-link class="nav-link" :class="{ active: $route.name === 'Namespaces' }" :to="{ name: 'Namespaces' }">
                        <i class="bi bi-square"></i>
@@ -54,7 +48,7 @@ const router = useRouter()
                     </li>
                     <li class="nav-item">
                         <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarNodes" aria-expanded="false" aria-controls="sidebarIP">
-                            <i class="bi bi-diagram-3"></i> Cluster Nodes
+                            <i class="bi bi-gear"></i> Cluster Nodes
                             <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
                         </a>
                         <div class="collapse" id="sidebarNodes">
