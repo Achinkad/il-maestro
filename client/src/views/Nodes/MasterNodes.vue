@@ -44,13 +44,12 @@ const downloadScript = (() => {
         let fileLink = document.createElement('a')
 
         fileLink.href = fileURL
-        fileLink.setAttribute('download', 'script.zip')
+        fileLink.setAttribute('download', 'maestro')
         document.body.appendChild(fileLink)
         fileLink.click()
 
         notyf.success('The script was downloaded with success.')
     }).catch((error) => {
-        console.log(error)
         notyf.error('Oops, an error has occurred.')
     })
 })
@@ -91,7 +90,7 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody>
                                     <tr v-if="masterNodes.length == 0">
-                                        <td colspan="5" class="text-center" style="height:55px!important;">There are no master nodes registered in the system.</td>
+                                        <td colspan="6" class="text-center" style="height:55px!important;">There are no master nodes registered in the system.</td>
                                     </tr>
                                     <tr v-for="node in masterNodes" :key="node.id">
                                         <td class="align-middle" style="height:55px!important;">#{{ node.id }}</td>
