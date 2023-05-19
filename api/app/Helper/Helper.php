@@ -26,22 +26,19 @@ class Helper
 
         try {
             if ($bodyContent) {
-                
                 $response = $clientHTTP->request($httpRequestMethod, $URL, [
                     'headers' => $headerOptions,
                     'json' => $bodyContent,
                     'timeout' => 3
                 ]);
             } else {
-                
                 $response = $clientHTTP->request($httpRequestMethod, $URL, [
                     'headers' => $headerOptions,
                     'timeout' => 3
                 ]);
             }
-      
-            
             return $response->getBody()->getContents();
+
         } catch (ConnectException $e) {
             throw new \Exception("Request timeout. Please verify the router connection.", 504); // Gateway Timeout
         } catch (RequestException $e) {

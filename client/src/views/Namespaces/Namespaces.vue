@@ -62,7 +62,7 @@ onBeforeMount(() => {
                                         <th>Manager</th>
                                         <th class="text-center" style="width:18%">Active</th>
                                         <th class="text-center" style="width:18%">Actions</th>
-                                       
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,7 +79,7 @@ onBeforeMount(() => {
                                         </td>
                                         <td v-else class="text-center">
                                             <span class="badge badge-success-lighten">Active</span>
-                                        </td> 
+                                        </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
                                                 <button class="btn btn-xs btn-light table-button" title="Delete">
@@ -118,7 +118,7 @@ onBeforeMount(() => {
                             <input type="text" class="form-control" id="port" placeholder="Enter a port"
                              required>
                         </div>
-                    
+
                         <div class="col-12 mt-4 d-flex justify-content-end">
                             <div class="px-1">
                                 <button type="reset" class="btn btn-light px-4 me-1">Clear</button>

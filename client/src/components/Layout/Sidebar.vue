@@ -49,10 +49,10 @@ const router = useRouter()
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <router-link class="nav-link" :class="{ active: $route.name === 'Pods' }" :to="{ name: 'Pods' }">
                             <i class="bi bi-box-fill"></i>
                             Pods
-                        </a>
+                        </router-link>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
