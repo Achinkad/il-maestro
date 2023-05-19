@@ -25,7 +25,7 @@ app.provide(
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Content-type': 'application/json',
-            'Content-Encoding': 'gzip',
+            'Content-Encoding': 'gzip'
         },
     })
 )

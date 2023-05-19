@@ -16,32 +16,28 @@ class Helper
     // Creates a new HTTP client and sends a request
     public static function httpClient(String $httpRequestMethod, String $local, Node $nodeMaster, Array $bodyContent = null)
     {
-
         $clientHTTP = new Client(['verify' => false]);
 
         $URL = 'https://' . $nodeMaster->ip_address . ':' . $nodeMaster->port . '/api/' . $local;
-      
+
         $headerOptions = [
             'Authorization' => 'Bearer ' . $nodeMaster->token,
         ];
-      
+
         try {
             if ($bodyContent) {
-                dd($headerOptions);
                 $response = $clientHTTP->request($httpRequestMethod, $URL, [
                     'headers' => $headerOptions,
                     'json' => $bodyContent,
                     'timeout' => 3
                 ]);
             } else {
-                dd($headerOptions);
                 $response = $clientHTTP->request($httpRequestMethod, $URL, [
                     'headers' => $headerOptions,
                     'timeout' => 3
                 ]);
             }
-      
-            
+
             return $response;
         } catch (ConnectException $e) {
             throw new \Exception("Request timeout. Please verify the router connection.", 504); // Gateway Timeout
