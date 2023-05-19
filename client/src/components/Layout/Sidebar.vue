@@ -22,7 +22,27 @@ const router = useRouter()
                         </router-link>
                     </li>
                     <li class="nav-item">
-                    
+                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarNodes" aria-expanded="false" aria-controls="sidebarIP"
+                        :class="{ active: $route.name === 'Nodes' || $route.name === 'MasterNodes' }">
+                            <i class="bi bi-gear"></i> Cluster Nodes
+                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
+                        </a>
+                        <div class="collapse" id="sidebarNodes">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <router-link class="nav-link" :class="{ active: $route.name === 'Nodes' }" :to="{ name: 'Nodes' }">
+                                        All Nodes
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link class="nav-link" :class="{ active: $route.name === 'MasterNodes' }" :to="{ name: 'MasterNodes' }">
+                                        Master Nodes
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
                        <router-link class="nav-link" :class="{ active: $route.name === 'Namespaces' }" :to="{ name: 'Namespaces' }">
                        <i class="bi bi-square"></i>
                             Namespaces
@@ -45,26 +65,6 @@ const router = useRouter()
                             <i class="bi bi-arrow-clockwise"></i>
                             Deployments
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link collapsed"  data-bs-toggle="collapse" href="#sidebarNodes" aria-expanded="false" aria-controls="sidebarIP">
-                            <i class="bi bi-gear"></i> Cluster Nodes
-                            <span class="menu-arrow"> <i class="bi bi-chevron-right"></i> </span>
-                        </a>
-                        <div class="collapse" id="sidebarNodes">
-                            <ul class="side-nav-second-level">
-                                <li>
-                                    <router-link class="nav-link" :class="{ active: $route.name === 'Nodes' }" :to="{ name: 'Nodes' }">
-                                        All Nodes
-                                    </router-link>
-                                </li>
-                                <li>
-                                    <router-link class="nav-link" :class="{ active: $route.name === 'MasterNodes' }" :to="{ name: 'MasterNodes' }">
-                                        Master Nodes
-                                    </router-link>
-                                </li>
-                            </ul>
-                        </div>
                     </li>
                 </ul>
             </div>
