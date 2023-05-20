@@ -14,14 +14,14 @@ class DeploymentController extends Controller
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
         
         try {
-            $namespaces = Helper::httpClient('GET', '/api/v1/namespaces', $nodeMaster);
+            $deployments = Helper::httpClient('GET', '/apis/apps/v1/deployments', $nodeMaster);
             
         } catch (\Exception $e) {
             
             return response()->json($e->getMessage(), $e->getCode());
         }
 
-        return $namespaces;
+        return $deployments;
         
     }
 
@@ -30,22 +30,45 @@ class DeploymentController extends Controller
     public function registerDeployment(Request $request)
     {
 
-        $nodeMaster = Node::where('id', $request->masterID)->firstOrFail();
-        unset($request['masterID']);
+        $keyLabel=$request->keys()[2];
 
-        $data['metadata']=$request->all();
+        $nodeMaster = Node::where('id', $request->id)->firstOrFail();
+        
+        // Body Builder
+        $body = array(
+            "metadata" => array(
+                "name" => $request->name
+            ),
+            "spec" => array(
+                "selector" => array(
+                    "matchLabels" => array(
+                        $keyLabel => $request->$keyLabel
+                    )
+                ),
+                "template" => array(
+                    "metadata" => array(
+                        "labels" => array(
+                            $keyLabel => $request->$keyLabel
+                        )
+                        
+                    ),
+                    "spec" => array(
+                        "containers" => json_decode($request->containers)
+                    )
+                ),
+               
+            )
+        );
         
         try {
-            $namespaces = Helper::httpClient('POST', '/api/v1/namespaces', $nodeMaster,$data);
+            $deployments = Helper::httpClient('POST', '/apis/apps/v1/namespaces/'.$request->namespace.'/deployments', $nodeMaster,$body);
             
         } catch (\Exception $e) {
-
-
-            
+ 
             return response()->json($e->getMessage(), $e->getCode());
         }
 
-        return $namespaces;
+        return $deployments;
         
     }
 
@@ -53,12 +76,12 @@ class DeploymentController extends Controller
     {
 
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
-
+       
         try{
-            Helper::httpClient('DELETE','/api/v1/namespaces/'.$request->all()['namespace']['metadata']['name'],$nodeMaster);
+            Helper::httpClient('DELETE','/apis/apps/v1/namespaces/'.$request->all()['deployment']['metadata']['namespace'].'/deployments/'.$request->all()['deployment']['metadata']['name'],$nodeMaster);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
-
+        
     }
 }

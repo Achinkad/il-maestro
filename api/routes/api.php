@@ -2,11 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NodeController;
-use App\Http\Controllers\NamespaceController;
 use App\Http\Controllers\PodController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NodeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\NamespaceController;
+use App\Http\Controllers\DeploymentController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);
@@ -35,6 +36,6 @@ Route::post('pods/create', [PodController::class, 'createPod']);
 Route::delete('pods/delete/{name}', [PodController::class, 'deletePod']);
 
 /* --- [API Routes] -> Deployments --- */
-Route::get('deployments', [NamespaceController::class, 'getDeployments']);
-Route::post('deployments/create', [NamespaceController::class, 'registerDeployment']);
-Route::delete('deployments/delete/{name}', [NamespaceController::class, 'deleteDeployment']);
+Route::get('deployments', [DeploymentController::class, 'getDeployments']);
+Route::post('deployments/create', [DeploymentController::class, 'registerDeployment']);
+Route::delete('deployments/delete/{name}', [DeploymentController::class, 'deleteDeployment']);

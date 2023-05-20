@@ -25,6 +25,11 @@ const router = createRouter({
             component: () => import('../views/Namespaces.vue')
         },
         {
+            path: '/deployments',
+            name: 'Deployments',
+            component: () => import('../views/Deployments.vue')
+        },
+        {
             path: '/pods',
             name: 'Pods',
             component: () => import('../views/Pods.vue')
