@@ -63,7 +63,7 @@ class NodeController extends Controller
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
 
         try {
-            $nodes = Helper::httpClient('GET', 'v1/nodes', $nodeMaster);
+            $nodes = Helper::httpClient('GET', '/api/v1/nodes', $nodeMaster);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
