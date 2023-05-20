@@ -8,6 +8,7 @@ use App\Http\Controllers\NodeController;
 use App\Http\Controllers\NamespaceController;
 use App\Http\Controllers\PodController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\DashboardController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);
@@ -44,3 +45,7 @@ Route::delete('services/delete/{name}', [ServiceController::class, 'deleteServic
 Route::get('deployments', [NamespaceController::class, 'getDeployments']);
 Route::post('deployments/create', [NamespaceController::class, 'registerDeployment']);
 Route::delete('deployments/delete/{name}', [NamespaceController::class, 'deleteDeployment']);
+
+/* --- [API Routes] -> Dashboard --- */
+Route::get('metrics', [DashboardController::class, 'metrics']);
+Route::get('logs', [DashboardController::class, 'logs']);

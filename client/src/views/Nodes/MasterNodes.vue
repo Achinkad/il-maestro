@@ -158,7 +158,10 @@ onBeforeMount(() => {
                 token or wish to obtain the one you already got, you can <span @click="downloadScript()"
                 style="cursor:pointer; text-decoration:underline;">click here</span> to download the
                 script and execute it on your cluster's master node for token retrieval. This script
-                also enables you to authorize access to the REST API by granting permissions.
+                also enables you to authorize access to the REST API by granting permissions. Alternative
+                you can download from the latest realease of
+                <a href="https://github.com/joseareia/maestro/archive/refs/tags/v1.1.1.zip"
+                target="_blank" style="color:#664d03;">Maestro</a> with <code>wget</code> or your favourite tool.
             </div>
         </div>
     </div>

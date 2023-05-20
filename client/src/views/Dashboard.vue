@@ -1,12 +1,58 @@
 <script setup>
 import { inject, computed, onBeforeMount } from 'vue'
 
+import { useNodeStore } from '../stores/node.js'
 import { useUserStore } from "../stores/user.js"
 
 const axiosApi = inject('axiosApi')
 const notyf = inject('notyf')
 
 const userStore = useUserStore()
+const nodeStore = useNodeStore()
+
+const loadMasterNodes = (() => { nodeStore.loadMasterNodes() })
+const masterNodes = computed(() => { return nodeStore.getMasterNodes() })
+
+const metrics = ((node) => {
+    let body = { id: node.id }
+
+    axiosApi.get('metrics', { params: body }).then(response => {
+        let fileURL = window.URL.createObjectURL(new Blob([response.data]))
+        let fileLink = document.createElement('a')
+
+        fileLink.href = fileURL
+        fileLink.setAttribute('download', 'metrics.txt')
+        document.body.appendChild(fileLink)
+        fileLink.click()
+
+        notyf.success('The metrics file was downloaded with success.')
+    }).catch(error => {
+        notyf.error(error.response.data + " (" + error.response.status + ")")
+    })
+})
+
+const logs = ((node) => {
+    let body = { id: node.id }
+
+    axiosApi.get('logs', { params: body }).then(response => {
+        let fileURL = window.URL.createObjectURL(new Blob([response.data]))
+        let fileLink = document.createElement('a')
+
+        fileLink.href = fileURL
+        fileLink.setAttribute('download', 'logs.txt')
+        document.body.appendChild(fileLink)
+        fileLink.click()
+
+        notyf.success('The logs file was downloaded with success.')
+    }).catch(error => {
+        notyf.error(error.response.data + " (" + error.response.status + ")")
+    })
+})
+
+// MASTER NODES
+onBeforeMount(() => {
+    loadMasterNodes()
+})
 </script>
 
 <template>
@@ -85,47 +131,48 @@ const userStore = useUserStore()
         <div class="col-xl-7 col-lg-7">
             <div class="card card-h-100">
                 <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Registered nodes</h4>
+                    <h4 class="header-title">Registered master nodes</h4>
                 </div>
 
                 <div class="card-body pt-0">
                     <table class="table table-responsive align-middle">
                         <thead class="table-light">
                             <tr>
-                                <th style="width:10%">#ID</th>
-                                <th>IP Address</th>
-                                <th>MAC Address</th>
-                                <th style="width:15%">Free Memory</th>
-                                <th style="width:13%">Free Space</th>
+                                <th style="width:8%">#ID</th>
+                                <th style="width:18%">Node name</th>
+                                <th style="width:18%">IP address</th>
+                                <th style="width:12%">Port</th>
                                 <th class="text-center" style="width:10%">Active</th>
                                 <th class="text-center" style="width:15%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr v-if="something.value == 0">
-                            <td colspan="7" class="text-center" style="height:55px!important;">There are no routers registered in the system.</td>
-                        </tr> -->
-                        <tr>
-                            <td class="align-middle" style="height:55px!important;">#1</td>
-                            <td>192.168.0.100</td>
-                            <td>XXX</td>
-                            <td> - </td>
-                            <td> - </td>
-                            <td class="text-center">
-                                <span class="badge badge-danger-lighten">Disabled</span>
-                            </td>
-                            <!-- <td class="text-center">
-                            <span class="badge badge-success-lighten">Active</span>
-                        </td> -->
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center">
-                                <button class="btn btn-xs btn-light table-button" title="Backup">
-                                    <i class="bi bi-database-add"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
+                            <tr v-if="masterNodes.length == 0">
+                                <td colspan="6" class="text-center" style="height:55px!important;">There are no master nodes registered in the system.</td>
+                            </tr>
+                            <tr v-for="node in masterNodes" :key="node.id">
+                                <td class="align-middle" style="height:55px!important;">#{{ node.id }}</td>
+                                <td>{{ node.name }}</td>
+                                <td>{{ node.ip_address }}</td>
+                                <td>{{ node.port }}</td>
+                                <td class="text-center" v-if="node.disabled">
+                                    <span class="badge badge-danger-lighten">Disabled</span>
+                                </td>
+                                <td class="text-center" v-else>
+                                    <span class="badge badge-success-lighten">Active</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <button class="btn btn-xs btn-light table-button" title="Metrics" @click="metrics(node)">
+                                            <i class="bi bi-graph-up"></i>
+                                        </button>
+                                        <button class="btn btn-xs btn-light table-button ms-2" title="Logs" @click="logs(node)">
+                                            <i class="bi bi-binoculars"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
             </table>
         </div>
     </div>
