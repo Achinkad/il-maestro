@@ -22,10 +22,11 @@ Route::get('nodes', [NodeController::class, 'getAllNodes']);
 Route::get('nodes/master', [NodeController::class, 'getMasterNodes']);
 Route::get('nodes/download-script', [NodeController::class, 'downloadScript']);
 Route::post('nodes/create', [NodeController::class, 'registerMasterNode']);
+Route::delete('nodes/delete/{id}', [NodeController::class, 'deleteMasterNode']);
 
 /* --- [API Routes] -> Namespaces --- */
 Route::get('namespaces', [NamespaceController::class, 'getNamespaces']);
+Route::post('namespaces/create', [NamespaceController::class, 'registerNamespace']);
+Route::delete('namespaces/delete/{name}', [NamespaceController::class, 'deleteNamespace']);
 
 
-
-Route::delete('nodes/delete/{id}', [NodeController::class, 'deleteMasterNode']);

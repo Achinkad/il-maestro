@@ -45,7 +45,7 @@ class Helper
         } catch (ConnectException $e) {
             throw new \Exception("Request timeout. Please verify the router connection.", 504); // Gateway Timeout
         } catch (RequestException $e) {
-            throw new \Exception("Request malformed. Please verify your request.", 400); // Bad Request
+            throw new \Exception($e, 400); // Bad Request
         } catch (ServerException $e) {
             throw new \Exception("Server error.", 500); // Server Error
         }

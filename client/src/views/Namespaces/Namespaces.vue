@@ -16,6 +16,26 @@ const masterNodes = computed(() => { return nodeStore.getMasterNodes() })
 const loadNamespaces = ((data) => { namespaceStore.loadNamespaces(data) })
 const namespaces = computed(() => { return namespaceStore.getNamespaces() })
 
+//Register a Namespace
+const registerNamespace = () => {
+    
+    let formData = new FormData()
+
+    formData.append('name', namespaces.value.name)
+    formData.append('masterID', masterNodeID.value)
+
+    namespaceStore.registerNamespace(formData)
+   
+}
+
+//Delete a Namespace
+const deleteNamespace = (namespace) => {
+
+    namespaceStore.deleteNamespace(namespace,masterNodeID.value)
+
+}
+
+
 //Load Namespaces
 watch(masterNodeID, () => {
     let data = { id: masterNodeID.value }
@@ -82,7 +102,7 @@ onBeforeMount(() => {
                                         </td> 
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
-                                                <button class="btn btn-xs btn-light table-button" title="Delete">
+                                                <button class="btn btn-xs btn-light table-button" title="Delete" @click="deleteNamespace(namespace)">
                                                     <i class="bi bi-trash3"></i>
                                                 </button>
                                             </div>
@@ -101,24 +121,12 @@ onBeforeMount(() => {
                     <h4 class="header-title">Register a new namespace</h4>
                 </div>
                 <div class="card-body pt-0">
-                    <form class="row g-3 needs-validation" @submit.prevent="registerNamespaces">
-                        <div class="col-4">
-                            <label for="name" class="form-label">Node name <span class="text-danger">*</span></label>
+                    <form class="row g-3 needs-validation" @submit.prevent="registerNamespace">
+                        <div class="col-6">
+                            <label for="name" class="form-label">Namespace name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" placeholder="Enter a name"
-                             required>
+                             required :disabled="typeof masterNodeID === 'object'" v-model="namespaces.name">
                         </div>
-                        <div class="col-4">
-                            <label for="ip_address" class="form-label">IP address <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="ip_address" placeholder="Enter an IP address"
-                            pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-                            required>
-                        </div>
-                        <div class="col-4">
-                            <label for="port" class="form-label">Port <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="port" placeholder="Enter a port"
-                             required>
-                        </div>
-                    
                         <div class="col-12 mt-4 d-flex justify-content-end">
                             <div class="px-1">
                                 <button type="reset" class="btn btn-light px-4 me-1">Clear</button>
