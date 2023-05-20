@@ -32,12 +32,11 @@ export const usePodStore = defineStore('pod', () => {
         await axiosApi.delete('pods/delete/' + pod.metadata.name, { params: data }).then(response => {
             notyf.success('The pod was deleted with success.')
 
-            // Remove from the array of master nodes
+            // Remove from the array of pods
             let index = pods.value.items.indexOf(pod)
             if (index > -1) pods.value.items.splice(index, 1)
 
         }).catch((error) => {
-            console.log(error)
             notyf.error(error.response.data + " (" + error.response.status + ")")
         })
     }

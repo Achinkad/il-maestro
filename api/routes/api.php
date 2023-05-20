@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NodeController;
 use App\Http\Controllers\NamespaceController;
 use App\Http\Controllers\PodController;
+use App\Http\Controllers\ServiceController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);
@@ -33,6 +34,11 @@ Route::delete('namespaces/delete/{name}', [NamespaceController::class, 'deleteNa
 Route::get('pods', [PodController::class, 'getPods']);
 Route::post('pods/create', [PodController::class, 'createPod']);
 Route::delete('pods/delete/{name}', [PodController::class, 'deletePod']);
+
+/* --- [API Routes] -> Services --- */
+Route::get('services', [ServiceController::class, 'getServices']);
+Route::post('services/create', [ServiceController::class, 'createService']);
+Route::delete('services/delete/{name}', [ServiceController::class, 'deleteService']);
 
 /* --- [API Routes] -> Deployments --- */
 Route::get('deployments', [NamespaceController::class, 'getDeployments']);

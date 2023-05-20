@@ -55,10 +55,10 @@ const router = useRouter()
                         </router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <router-link class="nav-link" :class="{ active: $route.name === 'Services' }" :to="{ name: 'Services' }">
                             <i class="bi bi-diagram-3"></i>
                             Services
-                        </a>
+                        </router-link>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
