@@ -3,7 +3,6 @@ import { inject, computed, onBeforeMount, watch,ref } from 'vue'
 
 import { useNodeStore } from '../stores/node.js'
 import { useUserStore } from "../stores/user.js"
-import { useNodeStore } from '../stores/node.js'
 import { useNamespaceStore } from '../stores/namespace.js'
 import { useDeploymentStore } from '../stores/deployment.js'
 import { usePodStore } from '../stores/pod.js'
@@ -49,90 +48,59 @@ const numberActiveDeployments = ref(0)
 const percentActiveDeployments = ref(0)
 
 watch(nodes, () => {
-
     nodes.value.forEach(node => {
-
-        numberNodes.value=numberNodes.value+node.items.length
-
+        numberNodes.value = numberNodes.value + node.items.length
         node.items.forEach( nodeItem => {
-
-            if(nodeItem.status.conditions[3].status=='True'){
-                numberActiveNodes.value++
-            }
+            if (nodeItem.status.conditions[3].status=='True') { numberActiveNodes.value++ }
         })
-
     })
 
-    if(numberNodes.value>0){
-        percentActiveNodes.value=numberActiveNodes.value/numberNodes.value*100
+    if (numberNodes.value > 0) {
+        percentActiveNodes.value = numberActiveNodes.value / numberNodes.value * 100
     }
-
 })
 
 watch(namespaces, () => {
-
     namespaces.value.forEach(namespace => {
-
-        numberNamespaces.value=numberNamespaces.value+namespace.items.length
-
+        numberNamespaces.value = numberNamespaces.value + namespace.items.length
         namespace.items.forEach( namespaceItem => {
-
-            if(namespaceItem.status.phase=='Active'){
-                numberActiveNamespaces.value++
-            }
+            if (namespaceItem.status.phase=='Active') { numberActiveNamespaces.value++ }
         })
-
     })
 
-    if(numberNamespaces.value>0){
-
-        percentActiveNamespaces.value=numberActiveNamespaces.value/numberNamespaces.value*100
+    if (numberNamespaces.value > 0) {
+        percentActiveNamespaces.value = numberActiveNamespaces.value / numberNamespaces.value * 100
     }
-
 })
 
 watch(deployments, () => {
-
     deployments.value.forEach(deployment => {
-
-        numberDeployments.value=numberDeployments.value+deployment.items.length
-
+        numberDeployments.value = numberDeployments.value + deployment.items.length
         deployment.items.forEach( deploymentItem => {
-
-            if(deploymentItem.status.conditions[1].status=='True'){
+            if (deploymentItem.status.conditions[1].status=='True') {
                 numberActiveDeployments.value++
             }
         })
-
     })
 
-    if(numberDeployments.value>0){
-
-        percentActiveDeployments.value=numberActiveDeployments.value/numberDeployments.value*100
+    if (numberDeployments.value > 0) {
+        percentActiveDeployments.value = numberActiveDeployments.value / numberDeployments.value * 100
     }
-
 })
 
 watch(pods, () => {
-
     pods.value.forEach(pod => {
-
-        numberPods.value=numberPods.value+pod.items.length
-
+        numberPods.value = numberPods.value + pod.items.length
         pod.items.forEach( podItem => {
-
-            if(podItem.status.phase == 'Running'){
+            if (podItem.status.phase == 'Running'){
                 numberActivePods.value++
             }
         })
-
     })
 
-    if(numberPods.value>0){
-
-        percentActivePods.value=numberActivePods.value/numberPods.value*100
+    if (numberPods.value > 0) {
+        percentActivePods.value = numberActivePods.value / numberPods.value * 100
     }
-
 })
 
 onBeforeMount(() => {
@@ -198,12 +166,12 @@ const logs = ((node) => {
                             <div class="float-end">
                                 <i class="bi bi-gear card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0"> All Nodes</h5>
+                            <h5 class="text-muted fw-normal mt-0">Nodes</h5>
                             <h3 v-if="numberNodes>0" class="mt-3 mb-3">{{numberNodes}}</h3>
                             <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span v-if="numberNodes>0" class="text-info me-2"> {{percentActiveNodes.toFixed(0)}}% </span>
-                                <span v-else class="text-info me-2"> - % </span>
+                                <span v-if="numberNodes>0" class="text-success me-2"> {{percentActiveNodes.toFixed(0)}}% </span>
+                                <span v-else class="text-success me-2"> - % </span>
                                 <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
@@ -215,12 +183,12 @@ const logs = ((node) => {
                             <div class="float-end">
                                 <i class="bi bi-square card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0">All Namespaces</h5>
+                            <h5 class="text-muted fw-normal mt-0">Namespaces</h5>
                             <h3 v-if="numberNamespaces>0" class="mt-3 mb-3">{{numberNamespaces}}</h3>
                             <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span v-if="numberNamespaces>0" class="text-info me-2">{{percentActiveNamespaces.toFixed(0)}}% </span>
-                                <span v-else class="text-info me-2"> - % </span>
+                                <span v-if="numberNamespaces>0" class="text-success me-2">{{percentActiveNamespaces.toFixed(0)}}% </span>
+                                <span v-else class="text-success me-2"> - % </span>
                                 <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
@@ -232,12 +200,12 @@ const logs = ((node) => {
                             <div class="float-end">
                                 <i class="bi bi-box-fill card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0">All Pods</h5>
+                            <h5 class="text-muted fw-normal mt-0">Pods</h5>
                             <h3 v-if="numberPods>0" class="mt-3 mb-3">{{numberPods}}</h3>
                             <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span v-if="numberPods>0" class="text-info me-2">{{percentActivePods.toFixed(0)}}% </span>
-                                <span v-else class="text-info me-2"> - % </span>
+                                <span v-if="numberPods>0" class="text-success me-2">{{percentActivePods.toFixed(0)}}% </span>
+                                <span v-else class="text-success me-2"> - % </span>
                                 <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
@@ -249,12 +217,12 @@ const logs = ((node) => {
                             <div class="float-end">
                                 <i class="bi bi-arrow-clockwise card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0">All Deployments</h5>
+                            <h5 class="text-muted fw-normal mt-0">Deployments</h5>
                             <h3 v-if="numberDeployments>0" class="mt-3 mb-3">{{numberDeployments}}</h3>
                             <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span v-if="numberDeployments>0" class="text-info me-2">{{percentActiveDeployments.toFixed(0)}}% </span>
-                                <span v-else class="text-info me-2"> - % </span>
+                                <span v-if="numberDeployments>0" class="text-success me-2">{{percentActiveDeployments.toFixed(0)}}% </span>
+                                <span v-else class="text-success me-2"> - % </span>
                                 <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
@@ -307,11 +275,11 @@ const logs = ((node) => {
                                 </td>
                             </tr>
                         </tbody>
-            </table>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 </template>
 
 <style scoped>

@@ -43,9 +43,9 @@ Route::post('services/create', [ServiceController::class, 'createService']);
 Route::delete('services/delete/{name}', [ServiceController::class, 'deleteService']);
 
 /* --- [API Routes] -> Deployments --- */
-Route::get('deployments', [NamespaceController::class, 'getDeployments']);
-Route::post('deployments/create', [NamespaceController::class, 'registerDeployment']);
-Route::delete('deployments/delete/{name}', [NamespaceController::class, 'deleteDeployment']);
+Route::get('deployments', [DeploymentController::class, 'getDeployments']);
+Route::post('deployments/create', [DeploymentController::class, 'registerDeployment']);
+Route::delete('deployments/delete/{name}', [DeploymentController::class, 'deleteDeployment']);
 
 /* --- [API Routes] -> Dashboard --- */
 Route::get('metrics', [DashboardController::class, 'metrics']);

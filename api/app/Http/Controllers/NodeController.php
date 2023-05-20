@@ -90,7 +90,7 @@ class NodeController extends Controller
         foreach($nodesAux as $node){
             array_push($nodes,json_decode($node));
         }*/
-    
+
         return $nodes;
     }
 
