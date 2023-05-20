@@ -37,6 +37,7 @@ class Helper
                     'timeout' => 3
                 ]);
             }
+
             return $response->getBody()->getContents();
 
         } catch (ConnectException $e) {

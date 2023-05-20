@@ -6,22 +6,22 @@ use Illuminate\Http\Request;
 use App\Models\Node;
 use App\Helper\Helper;
 
-class PodController extends Controller
+class ServiceController extends Controller
 {
-    public function getPods(Request $request)
+    public function getServices(Request $request)
     {
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
 
         try {
-            $pods = Helper::httpClient('GET', '/api/v1/pods', $nodeMaster);
+            $services = Helper::httpClient('GET', '/api/v1/services', $nodeMaster);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
 
-        return $pods;
+        return $services;
     }
 
-    public function createPod(Request $request)
+    public function createService(Request $request)
     {
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
 
@@ -31,27 +31,27 @@ class PodController extends Controller
                 "name" => $request->name,
             ),
             "spec" => array(
-                "containers" => json_decode($request->containers),
+                "ports" => json_decode($request->ports),
             )
         );
 
         try {
-            $pod = Helper::httpClient('POST', '/api/v1/namespaces/'. $request->namespace .'/pods', $nodeMaster, $body);
+            $service = Helper::httpClient('POST', '/api/v1/namespaces/'. $request->namespace .'/services', $nodeMaster, $body);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
 
-        return $pod;
+        return $service;
     }
 
-    public function deletePod(Request $request)
+    public function deleteService(Request $request)
     {
         $masterNode = Node::where('id', $request->id)->firstOrFail();
-        $pod = $request->route('name');
+        $service = $request->route('name');
         $namespace = $request->namespace;
 
         try {
-            $response = Helper::httpClient('DELETE', '/api/v1/namespaces/'. $namespace .'/pods/' . $pod, $masterNode);
+            $response = Helper::httpClient('DELETE', '/api/v1/namespaces/'. $namespace .'/services/' . $service, $masterNode);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }

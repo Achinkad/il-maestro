@@ -18,14 +18,14 @@ const namespaces = computed(() => { return namespaceStore.getNamespaces() })
 
 //Register a Namespace
 const registerNamespace = () => {
-    
+
     let formData = new FormData()
 
     formData.append('name', namespaces.value.name)
     formData.append('masterID', masterNodeID.value)
 
     namespaceStore.registerNamespace(formData)
-   
+
 }
 
 //Delete a Namespace
@@ -65,7 +65,7 @@ onBeforeMount(() => {
         </div>
     </div>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-h-100">
@@ -76,12 +76,12 @@ onBeforeMount(() => {
                             <table class="table table-responsive align-middle">
                                 <thead class="table-light">
                                     <tr>
-                                        <th >Name</th>
-                                        <th >Resouce Version</th>
-                                        <th >Creation Time</th>
-                                        <th>Manager</th>
-                                        <th class="text-center" style="width:18%">Active</th>
-                                        <th class="text-center" style="width:18%">Actions</th>
+                                        <th>Name</th>
+                                        <th>Resouce Version</th>
+                                        <th>Creation Time</th>
+                                        <th style="width:15%">Manager</th>
+                                        <th class="text-center" style="width:12%">Active</th>
+                                        <th class="text-center" style="width:12%">Actions</th>
 
                                     </tr>
                                 </thead>
@@ -115,14 +115,14 @@ onBeforeMount(() => {
                 </div>
             </div>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
             <div class="card card-h-100">
                 <div class="d-flex card-header justify-content-between align-items-center">
                     <h4 class="header-title">Register a new namespace</h4>
                 </div>
                 <div class="card-body pt-0">
                     <form class="row g-3 needs-validation" @submit.prevent="registerNamespace">
-                        <div class="col-6">
+                        <div class="col-12">
                             <label for="name" class="form-label">Namespace name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="name" placeholder="Enter a name"
                              required :disabled="typeof masterNodeID === 'object'" v-model="namespaces.name">
@@ -137,6 +137,9 @@ onBeforeMount(() => {
                         </div>
                     </form>
                 </div>
+            </div>
+            <div class="callout mt-0" v-if="typeof masterNodeID === 'object'">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i> Please select a master node in order to add a new namespace.
             </div>
         </div>
     </div>

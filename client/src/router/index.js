@@ -35,6 +35,11 @@ const router = createRouter({
             component: () => import('../views/Pods.vue')
         },
         {
+            path: '/services',
+            name: 'Services',
+            component: () => import('../views/Services.vue')
+        },
+        {
             path: '/login',
             name: 'Login',
             component: () => import('../views/Login.vue')
