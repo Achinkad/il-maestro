@@ -22,7 +22,7 @@ const router = createRouter({
         {
             path: '/namespaces',
             name: 'Namespaces',
-            component: () => import('../views/Namespaces/Namespaces.vue')
+            component: () => import('../views/Namespaces.vue')
         },
         {
             path: '/pods',

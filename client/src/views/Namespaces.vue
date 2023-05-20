@@ -1,7 +1,7 @@
 <script setup>
 import { inject,onBeforeMount,ref,computed,watch } from 'vue'
-import { useNodeStore } from '../../stores/node.js'
-import { useNamespaceStore } from '../../stores/namespace.js'
+import { useNodeStore } from '../stores/node.js'
+import { useNamespaceStore } from '../stores/namespace.js'
 
 const namespaceStore = useNamespaceStore()
 const nodeStore = useNodeStore()
