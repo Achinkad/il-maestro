@@ -100,7 +100,7 @@ onBeforeMount(() => {
                 <div class="col-12">
                     <div class="card card-h-100">
                         <div class="d-flex card-header justify-content-between align-items-center">
-                            <h4 class="header-title">Registered Deployments</h4>
+                            <h4 class="header-title">Deployments available for the master node selected</h4>
                         </div>
                         <div class="card-body pt-0">
                             <table class="table table-responsive align-middle">
@@ -117,7 +117,7 @@ onBeforeMount(() => {
                                 </thead>
                                 <tbody>
                                     <tr v-if="deployments.length == 0">
-                                        <td colspan="6" class="text-center" style="height:55px!important;">There are no Deployments registered in the system.</td>
+                                        <td colspan="6" class="text-center" style="height:55px!important;">Please, select a master node to see all the deployments.</td>
                                     </tr>
                                     <tr v-for="deployment in deployments.items" :key="deployment.id">
                                         <td class="long-text-table">{{deployment.metadata.name}}</td>
