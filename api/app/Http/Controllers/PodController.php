@@ -14,7 +14,7 @@ class PodController extends Controller
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
 
         try {
-            $pods = Helper::httpClient('GET', 'v1/pods', $nodeMaster);
+            $pods = Helper::httpClient('GET', '/api/v1/pods', $nodeMaster);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
@@ -37,7 +37,7 @@ class PodController extends Controller
         );
 
         try {
-            $pod = Helper::httpClient('POST', 'v1/namespaces/'. $request->namespace .'/pods', $nodeMaster, $body);
+            $pod = Helper::httpClient('POST', '/api/v1/namespaces/'. $request->namespace .'/pods', $nodeMaster, $body);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
@@ -52,7 +52,7 @@ class PodController extends Controller
         $namespace = $request->namespace;
 
         try {
-            $response = Helper::httpClient('DELETE', 'v1/namespaces/'. $namespace .'/pods/' . $pod, $masterNode);
+            $response = Helper::httpClient('DELETE', '/api/v1/namespaces/'. $namespace .'/pods/' . $pod, $masterNode);
         } catch (\Exception $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }

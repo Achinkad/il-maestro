@@ -29,7 +29,12 @@ Route::get('namespaces', [NamespaceController::class, 'getNamespaces']);
 Route::post('namespaces/create', [NamespaceController::class, 'registerNamespace']);
 Route::delete('namespaces/delete/{name}', [NamespaceController::class, 'deleteNamespace']);
 
-/* --- [API Routes] -> Nodes --- */
+/* --- [API Routes] -> Pods --- */
 Route::get('pods', [PodController::class, 'getPods']);
 Route::post('pods/create', [PodController::class, 'createPod']);
 Route::delete('pods/delete/{name}', [PodController::class, 'deletePod']);
+
+/* --- [API Routes] -> Deployments --- */
+Route::get('deployments', [NamespaceController::class, 'getDeployments']);
+Route::post('deployments/create', [NamespaceController::class, 'registerDeployment']);
+Route::delete('deployments/delete/{name}', [NamespaceController::class, 'deleteDeployment']);

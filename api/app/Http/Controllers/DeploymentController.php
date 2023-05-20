@@ -6,9 +6,9 @@ use App\Models\Node;
 use App\Helper\Helper;
 use Illuminate\Http\Request;
 
-class NamespaceController extends Controller
+class DeploymentController extends Controller
 {
-    public function getNamespaces(Request $request)
+    public function getDeployments(Request $request)
     {
 
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
@@ -27,7 +27,7 @@ class NamespaceController extends Controller
 
     
 
-    public function registerNamespace(Request $request)
+    public function registerDeployment(Request $request)
     {
 
         $nodeMaster = Node::where('id', $request->masterID)->firstOrFail();
@@ -49,7 +49,7 @@ class NamespaceController extends Controller
         
     }
 
-    public function deleteNamespace(Request $request) 
+    public function deleteDeployment(Request $request) 
     {
 
         $nodeMaster = Node::where('id', $request->id)->firstOrFail();
@@ -61,6 +61,4 @@ class NamespaceController extends Controller
         }
 
     }
-
-
 }

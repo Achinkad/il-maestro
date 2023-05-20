@@ -18,7 +18,7 @@ class Helper
     {
         $clientHTTP = new Client(['verify' => false]);
 
-        $URL = 'https://' . $nodeMaster->ip_address . ':' . $nodeMaster->port . '/api/' . $local;
+        $URL = 'https://' . $nodeMaster->ip_address . ':' . $nodeMaster->port . $local;
 
         $headerOptions = [
             'Authorization' => 'Bearer ' . $nodeMaster->token,
