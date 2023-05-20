@@ -1,12 +1,144 @@
 <script setup>
-import { inject, computed, onBeforeMount } from 'vue'
+import { inject, computed, onBeforeMount, watch,ref } from 'vue'
 
 import { useUserStore } from "../stores/user.js"
+import { useNodeStore } from '../stores/node.js'
+import { useNamespaceStore } from '../stores/namespace.js'
+import { useDeploymentStore } from '../stores/deployment.js'
+import { usePodStore } from '../stores/pod.js'
+
+const deploymentStore = useDeploymentStore()
+const namespaceStore = useNamespaceStore()
+const nodeStore = useNodeStore()
+const podStore = usePodStore()
+const userStore = useUserStore()
 
 const axiosApi = inject('axiosApi')
 const notyf = inject('notyf')
 
-const userStore = useUserStore()
+const loadNodes = (() => { nodeStore.loadNodes() })
+const nodes = computed(() => { return nodeStore.getNodes() })
+
+const loadNamespaces = ((data) => { namespaceStore.loadNamespaces(data) })
+const namespaces = computed(() => { return namespaceStore.getNamespaces() })
+
+const loadPods = ((data) => { podStore.loadPods(data) })
+const pods = computed(() => { return podStore.getPods() })
+
+const loadDeployments = ((data) => { deploymentStore.loadDeployments(data) })
+const deployments = computed(() => { return deploymentStore.getDeployments() })
+
+const numberNodes = ref(0)
+const numberActiveNodes = ref(0)
+const percentActiveNodes = ref(0)
+
+const numberNamespaces = ref(0)
+const numberActiveNamespaces = ref(0)
+const percentActiveNamespaces = ref(0)
+
+const numberPods = ref(0)
+const numberActivePods = ref(0)
+const percentActivePods = ref(0)
+
+const numberDeployments = ref(0)
+const numberActiveDeployments = ref(0)
+const percentActiveDeployments = ref(0)
+
+watch(nodes, () => {
+
+    nodes.value.forEach(node => {
+
+        numberNodes.value=numberNodes.value+node.items.length
+        
+        node.items.forEach( nodeItem => {
+
+            if(nodeItem.status.conditions[3].status=='True'){
+                numberActiveNodes.value++
+            }
+        })
+       
+    })
+
+    if(numberNodes.value>0){
+        percentActiveNodes.value=numberActiveNodes.value/numberNodes.value*100
+    }
+    
+})
+
+watch(namespaces, () => {
+
+    namespaces.value.forEach(namespace => {
+
+        numberNamespaces.value=numberNamespaces.value+namespace.items.length
+        
+        namespace.items.forEach( namespaceItem => {
+
+            if(namespaceItem.status.phase=='Active'){
+                numberActiveNamespaces.value++
+            }
+        })
+       
+    })
+
+    if(numberNamespaces.value>0){
+        
+        percentActiveNamespaces.value=numberActiveNamespaces.value/numberNamespaces.value*100
+    }
+    
+})
+
+watch(deployments, () => {
+
+    deployments.value.forEach(deployment => {
+
+        numberDeployments.value=numberDeployments.value+deployment.items.length
+        
+        deployment.items.forEach( deploymentItem => {
+
+            if(deploymentItem.status.conditions[1].status=='True'){
+                numberActiveDeployments.value++
+            }
+        })
+       
+    })
+
+    if(numberDeployments.value>0){
+        
+        percentActiveDeployments.value=numberActiveDeployments.value/numberDeployments.value*100
+    }
+    
+})
+
+watch(pods, () => {
+
+    pods.value.forEach(pod => {
+
+        numberPods.value=numberPods.value+pod.items.length
+        
+        pod.items.forEach( podItem => {
+
+            if(podItem.status.phase == 'Running'){
+                numberActivePods.value++
+            }
+        })
+       
+    })
+
+    if(numberPods.value>0){
+        
+        percentActivePods.value=numberActivePods.value/numberPods.value*100
+    }
+    
+})
+
+onBeforeMount(() => {
+    let data = { id: 0 }
+    loadNodes(data)
+    loadNamespaces(data)
+    loadPods(data)
+    loadDeployments(data)
+})
+
 </script>
 
 <template>
@@ -24,12 +156,14 @@ const userStore = useUserStore()
                     <div class="card widget-flat">
                         <div class="card-body">
                             <div class="float-end">
-                                <i class="bi bi-pc-display card-icon"></i>
+                                <i class="bi bi-gear card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0">Nodes</h5>
-                            <h3 class="mt-3 mb-3">10</h3>
+                            <h5 class="text-muted fw-normal mt-0"> All Nodes</h5>
+                            <h3 v-if="numberNodes>0" class="mt-3 mb-3">{{numberNodes}}</h3>
+                            <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span class="text-success me-2"> 70% </span>
+                                <span v-if="numberNodes>0" class="text-info me-2"> {{percentActiveNodes.toFixed(0)}}% </span>
+                                <span v-else class="text-info me-2"> - % </span>
                                 <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
@@ -39,13 +173,15 @@ const userStore = useUserStore()
                     <div class="card widget-flat">
                         <div class="card-body">
                             <div class="float-end">
-                                <i class="bi bi-database-fill card-icon"></i>
+                                <i class="bi bi-square card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0">Backups</h5>
-                            <h3 class="mt-3 mb-3">26</h3>
+                            <h5 class="text-muted fw-normal mt-0">All Namespaces</h5>
+                            <h3 v-if="numberNamespaces>0" class="mt-3 mb-3">{{numberNamespaces}}</h3>
+                            <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span class="text-success me-2"> 76.12% </span>
-                                <span class="text-nowrap">In last week</span>
+                                <span v-if="numberNamespaces>0" class="text-info me-2">{{percentActiveNamespaces.toFixed(0)}}% </span>
+                                <span v-else class="text-info me-2"> - % </span>
+                                <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
                     </div>
@@ -54,13 +190,15 @@ const userStore = useUserStore()
                     <div class="card widget-flat">
                         <div class="card-body">
                             <div class="float-end">
-                                <i class="bi bi-graph-up card-icon"></i>
+                                <i class="bi bi-box-fill card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0">Traffic</h5>
-                            <h3 class="mt-3 mb-3">~ 14 P/S</h3>
+                            <h5 class="text-muted fw-normal mt-0">All Pods</h5>
+                            <h3 v-if="numberPods>0" class="mt-3 mb-3">{{numberPods}}</h3>
+                            <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span class="text-danger me-2"> -12.57% </span>
-                                <span class="text-nowrap">Since last week</span>
+                                <span v-if="numberPods>0" class="text-info me-2">{{percentActivePods.toFixed(0)}}% </span>
+                                <span v-else class="text-info me-2"> - % </span>
+                                <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>
                     </div>
@@ -69,12 +207,14 @@ const userStore = useUserStore()
                     <div class="card widget-flat">
                         <div class="card-body">
                             <div class="float-end">
-                                <i class="bi bi-incognito card-icon"></i>
+                                <i class="bi bi-arrow-clockwise card-icon"></i>
                             </div>
-                            <h5 class="text-muted fw-normal mt-0">VPN Clients</h5>
-                            <h3 class="mt-3 mb-3">8</h3>
+                            <h5 class="text-muted fw-normal mt-0">All Deployments</h5>
+                            <h3 v-if="numberDeployments>0" class="mt-3 mb-3">{{numberDeployments}}</h3>
+                            <h3 v-else class="mt-3 mb-3">-</h3>
                             <p class="mb-0 text-muted">
-                                <span class="text-success me-2"> 12.31% </span>
+                                <span v-if="numberDeployments>0" class="text-info me-2">{{percentActiveDeployments.toFixed(0)}}% </span>
+                                <span v-else class="text-info me-2"> - % </span>
                                 <span class="text-nowrap">Active right now</span>
                             </p>
                         </div>

@@ -5,20 +5,40 @@ namespace App\Http\Controllers;
 use App\Models\Node;
 use App\Helper\Helper;
 use Illuminate\Http\Request;
+use App\Http\Controllers\NodeController;
 
 class DeploymentController extends Controller
 {
     public function getDeployments(Request $request)
     {
+        $deployments= [];
 
-        $nodeMaster = Node::where('id', $request->id)->firstOrFail();
-        
-        try {
-            $deployments = Helper::httpClient('GET', '/apis/apps/v1/deployments', $nodeMaster);
+        if($request->id == 0){
+            $nodeMaster = (new NodeController)->getMasterNodes();
+
             
-        } catch (\Exception $e) {
-            
-            return response()->json($e->getMessage(), $e->getCode());
+            foreach($nodeMaster as $master){
+                if($master->disabled==false){
+                    try {
+                        array_push($deployments,json_decode(Helper::httpClient('GET', '/apis/apps/v1/deployments', $master)));
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
+                }
+                
+            }
+
+        }
+        else{
+            $nodeMaster = Node::where('id', $request->id)->firstOrFail();
+
+            try {
+                $deployments = Helper::httpClient('GET', '/apis/apps/v1/deployments', $nodeMaster);
+                
+            } catch (\Exception $e) {
+                
+                return response()->json($e->getMessage(), $e->getCode());
+            }
         }
 
         return $deployments;

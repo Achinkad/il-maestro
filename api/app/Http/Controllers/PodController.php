@@ -10,13 +10,33 @@ class PodController extends Controller
 {
     public function getPods(Request $request)
     {
-        $nodeMaster = Node::where('id', $request->id)->firstOrFail();
 
-        try {
-            $pods = Helper::httpClient('GET', '/api/v1/pods', $nodeMaster);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(), $e->getCode());
+        $pods=[];
+        if($request->id == 0){
+            $nodeMaster = (new NodeController)->getMasterNodes();
+
+            foreach($nodeMaster as $master){
+                if($master->disabled==false){
+                    try {
+                        array_push($pods,json_decode(Helper::httpClient('GET', '/api/v1/pods', $master)));
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
+                }
+            }
+            
         }
+        else{
+
+            $nodeMaster = Node::where('id', $request->id)->firstOrFail();
+
+            try {
+                $pods = Helper::httpClient('GET', '/api/v1/pods', $nodeMaster);
+            } catch (\Exception $e) {
+                return response()->json($e->getMessage(), $e->getCode());
+            }
+        }
+       
 
         return $pods;
     }

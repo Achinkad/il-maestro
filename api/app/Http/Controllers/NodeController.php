@@ -60,14 +60,37 @@ class NodeController extends Controller
 
     public function getAllNodes(Request $request)
     {
-        $nodeMaster = Node::where('id', $request->id)->firstOrFail();
 
-        try {
-            $nodes = Helper::httpClient('GET', '/api/v1/nodes', $nodeMaster);
-        } catch (\Exception $e) {
-            return response()->json($e->getMessage(), $e->getCode());
+        $nodes=[];
+        if($request->id == 0){
+            $nodeMaster = (new NodeController)->getMasterNodes();
+
+            foreach($nodeMaster as $master){
+                if($master->disabled==false){
+                    try {
+                        array_push($nodes,json_decode(Helper::httpClient('GET', '/api/v1/nodes', $master)));
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
+                }
+            }
+        }
+        else{
+            $nodeMaster = Node::where('id', $request->id)->firstOrFail();
+
+            try {
+                $nodes = Helper::httpClient('GET', '/api/v1/nodes', $nodeMaster);
+            } catch (\Exception $e) {
+                return response()->json($e->getMessage(), $e->getCode());
+            }
+
         }
 
+        /*
+        foreach($nodesAux as $node){
+            array_push($nodes,json_decode($node));
+        }*/
+    
         return $nodes;
     }
 
