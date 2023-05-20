@@ -3,12 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\NodeController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\NamespaceController;
 use App\Http\Controllers\PodController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeploymentController;
 
 /* --- [API Routes] -> Users --- */
 Route::resource('users', UserController::class);

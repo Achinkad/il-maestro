@@ -138,7 +138,7 @@ watch(masterNodeID, () => {
         <div class="col-md-5">
             <div class="card card-h-100">
                 <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Register a service</h4>
+                    <h4 class="header-title">Register a new service</h4>
                 </div>
                 <div class="card-body pt-0">
                     <form class="row g-3 needs-validation" @submit.prevent="registerService">

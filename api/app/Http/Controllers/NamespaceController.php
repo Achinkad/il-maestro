@@ -11,14 +11,30 @@ class NamespaceController extends Controller
     public function getNamespaces(Request $request)
     {
 
-        $nodeMaster = Node::where('id', $request->id)->firstOrFail();
-        
-        try {
-            $namespaces = Helper::httpClient('GET', '/api/v1/namespaces', $nodeMaster);
-            
-        } catch (\Exception $e) {
-            
-            return response()->json($e->getMessage(), $e->getCode());
+        $namespaces= [];
+        if($request->id == 0){
+            $nodeMaster = (new NodeController)->getMasterNodes();
+
+            foreach($nodeMaster as $master){
+                if($master->disabled==false){
+                    try {
+                        array_push($namespaces,json_decode(Helper::httpClient('GET', '/api/v1/namespaces', $master)));
+                    } catch (\Exception $e) {
+                        return response()->json($e->getMessage(), $e->getCode());
+                    }
+                }
+            }
+        }
+        else{
+            $nodeMaster = Node::where('id', $request->id)->firstOrFail();
+
+            try {
+                $namespaces = Helper::httpClient('GET', '/api/v1/namespaces', $nodeMaster);
+                
+            } catch (\Exception $e) {
+                
+                return response()->json($e->getMessage(), $e->getCode());
+            }
         }
 
         return $namespaces;
