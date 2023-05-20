@@ -169,6 +169,13 @@ td {
     height: 55px !important;
 }
 
+.long-text-table {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 1px;
+}
+
 .form-control {
     display: block;
     width: 100%;

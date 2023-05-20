@@ -82,7 +82,7 @@ onBeforeMount(() => {
                                         <th>Manager</th>
                                         <th class="text-center" style="width:18%">Active</th>
                                         <th class="text-center" style="width:18%">Actions</th>
-                                       
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -99,7 +99,7 @@ onBeforeMount(() => {
                                         </td>
                                         <td v-else class="text-center">
                                             <span class="badge badge-success-lighten">Active</span>
-                                        </td> 
+                                        </td>
                                         <td class="text-center">
                                             <div class="d-flex justify-content-center">
                                                 <button class="btn btn-xs btn-light table-button" title="Delete" @click="deleteNamespace(namespace)">
