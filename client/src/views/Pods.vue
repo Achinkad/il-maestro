@@ -182,7 +182,7 @@ watch(masterNodeID, () => {
                 </div>
             </div>
             <div class="callout mt-0" v-if="typeof masterNodeID === 'object'">
-                <b>Note:</b> Please select a master node in order to add a new pod.
+                <i class="bi bi-exclamation-triangle-fill me-1"></i> Please select a master node in order to add a new pod.
             </div>
         </div>
     </div>

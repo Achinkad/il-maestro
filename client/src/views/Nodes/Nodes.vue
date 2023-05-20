@@ -112,7 +112,7 @@ watch(masterNodeID, () => {
                 </div>
             </div>
             <div class="callout mt-0" v-if="!selectedMasterNode">
-                <b>Note:</b> Click in the eye icon to view more details about a node.
+                <i class="bi bi-exclamation-triangle-fill me-1"></i> Click in the eye icon to view more details about a node.
             </div>
         </div>
     </div>

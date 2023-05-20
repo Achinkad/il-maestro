@@ -154,11 +154,11 @@ onBeforeMount(() => {
                 </div>
             </div>
             <div class="callout">
-                <b>Note:</b> If you do not possess a bearer token or wish to obtain the one you
-                already got, you can <span @click="downloadScript()" style="cursor:pointer;
-                text-decoration:underline;">click here</span> to download the script and execute it
-                on your cluster's master node for token retrieval. This script also enables you to
-                authorize access to the REST API by granting permissions.
+                <i class="bi bi-exclamation-triangle-fill me-1"></i> If you do not possess a bearer
+                token or wish to obtain the one you already got, you can <span @click="downloadScript()"
+                style="cursor:pointer; text-decoration:underline;">click here</span> to download the
+                script and execute it on your cluster's master node for token retrieval. This script
+                also enables you to authorize access to the REST API by granting permissions.
             </div>
         </div>
     </div>
