@@ -50,3 +50,4 @@ Route::delete('deployments/delete/{name}', [DeploymentController::class, 'delete
 /* --- [API Routes] -> Dashboard --- */
 Route::get('metrics', [DashboardController::class, 'metrics']);
 Route::get('logs', [DashboardController::class, 'logs']);
+Route::get('resources', [DashboardController::class, 'resourceUsages']);

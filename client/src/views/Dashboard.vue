@@ -103,15 +103,6 @@ watch(pods, () => {
     }
 })
 
-onBeforeMount(() => {
-    let data = { id: 0 }
-    loadNodes(data)
-    loadNamespaces(data)
-    loadPods(data)
-    loadDeployments(data)
-    loadMasterNodes()
-})
-
 const metrics = ((node) => {
     let body = { id: node.id }
 
@@ -146,6 +137,117 @@ const logs = ((node) => {
     }).catch(error => {
         notyf.error(error.response.data + " (" + error.response.status + ")")
     })
+})
+
+const resources = (() => {
+    if (masterNodes.value.length == 0) return
+
+    let masterNodesIDs = []
+    masterNodes.value.forEach((i) => {
+        if (!i.disabled) masterNodesIDs.push(i.id)
+    })
+
+    let body = { id: masterNodesIDs }
+
+    axiosApi.get('resources', { params: body }).then(response => {
+        seriesCPU.value.push(response.data['CPU'])
+        seriesMEM.value.push(response.data['MEM'])
+    }).catch(error => {
+        notyf.error(error.response.data + " (" + error.response.status + ")")
+    })
+})
+
+watch(masterNodes, () => { resources() })
+
+// Chart Information
+
+const seriesCPU = ref([])
+const seriesMEM = ref([])
+
+const chartOptionsCPU = {
+    chart: {
+        toolbar: {
+            show: true,
+            offsetX: 0,
+            offsetY: -52,
+        }
+    },
+    plotOptions : {
+        radialBar: {
+            hollow: {
+                margin: 15,
+                size: "70%"
+            },
+            dataLabels: {
+                showOn: "always",
+                name: {
+                    offsetY: -5,
+                    show: true,
+                    color: "#888",
+                    fontSize: "14px"
+                },
+                value: {
+                    color: "#111",
+                    fontSize: "22px",
+                    show: true
+                }
+            }
+        }
+    },
+    fill: {
+        colors: '#727cf5'
+    },
+    labels: [
+        'CPU Usage'
+    ]
+}
+
+const chartOptionsMemory = {
+    chart: {
+        toolbar: {
+            show: true,
+            offsetX: 0,
+            offsetY: -52,
+        }
+    },
+    plotOptions : {
+        radialBar: {
+            hollow: {
+                margin: 15,
+                size: "70%"
+            },
+            dataLabels: {
+                showOn: "always",
+                name: {
+                    offsetY: -5,
+                    show: true,
+                    color: "#888",
+                    fontSize: "14px"
+                },
+                value: {
+                    color: "#111",
+                    fontSize: "22px",
+                    show: true
+                }
+            }
+        }
+    },
+    fill: {
+        colors: '#727cf5'
+    },
+    labels: [
+        'Memory Usage'
+    ]
+}
+
+onBeforeMount(() => {
+    let data = { id: 0 }
+    loadMasterNodes()
+    loadNodes(data)
+    loadNamespaces(data)
+    loadPods(data)
+    loadDeployments(data)
+    resources()
 })
 </script>
 
@@ -231,51 +333,79 @@ const logs = ((node) => {
             </div>
         </div>
         <div class="col-xl-7 col-lg-7">
-            <div class="card card-h-100">
-                <div class="d-flex card-header justify-content-between align-items-center">
-                    <h4 class="header-title">Registered master nodes</h4>
-                </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-h-100">
+                        <div class="d-flex card-header justify-content-between align-items-center">
+                            <h4 class="header-title">Registered master nodes - Clusters</h4>
+                        </div>
 
-                <div class="card-body pt-0">
-                    <table class="table table-responsive align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th style="width:8%">#ID</th>
-                                <th style="width:18%">Node name</th>
-                                <th style="width:18%">IP address</th>
-                                <th style="width:12%">Port</th>
-                                <th class="text-center" style="width:10%">Active</th>
-                                <th class="text-center" style="width:15%">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-if="masterNodes.length == 0">
-                                <td colspan="6" class="text-center" style="height:55px!important;">There are no master nodes registered in the system.</td>
-                            </tr>
-                            <tr v-for="node in masterNodes" :key="node.id">
-                                <td class="align-middle" style="height:55px!important;">#{{ node.id }}</td>
-                                <td>{{ node.name }}</td>
-                                <td>{{ node.ip_address }}</td>
-                                <td>{{ node.port }}</td>
-                                <td class="text-center" v-if="node.disabled">
-                                    <span class="badge badge-danger-lighten">Disabled</span>
-                                </td>
-                                <td class="text-center" v-else>
-                                    <span class="badge badge-success-lighten">Active</span>
-                                </td>
-                                <td class="text-center">
-                                    <div class="d-flex justify-content-center">
-                                        <button class="btn btn-xs btn-light table-button" title="Metrics" @click="metrics(node)">
-                                            <i class="bi bi-graph-up"></i>
-                                        </button>
-                                        <button class="btn btn-xs btn-light table-button ms-2" title="Logs" @click="logs(node)">
-                                            <i class="bi bi-binoculars"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div class="card-body pt-0">
+                            <table class="table table-responsive align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th style="width:8%">#ID</th>
+                                        <th style="width:18%">Node name</th>
+                                        <th style="width:18%">IP address</th>
+                                        <th style="width:12%">Port</th>
+                                        <th class="text-center" style="width:10%">Active</th>
+                                        <th class="text-center" style="width:15%">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-if="masterNodes.length == 0">
+                                        <td colspan="6" class="text-center" style="height:55px!important;">There are no master nodes registered in the system.</td>
+                                    </tr>
+                                    <tr v-for="node in masterNodes" :key="node.id">
+                                        <td class="align-middle" style="height:55px!important;">#{{ node.id }}</td>
+                                        <td>{{ node.name }}</td>
+                                        <td>{{ node.ip_address }}</td>
+                                        <td>{{ node.port }}</td>
+                                        <td class="text-center" v-if="node.disabled">
+                                            <span class="badge badge-danger-lighten">Disabled</span>
+                                        </td>
+                                        <td class="text-center" v-else>
+                                            <span class="badge badge-success-lighten">Active</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="d-flex justify-content-center">
+                                                <button class="btn btn-xs btn-light table-button" title="Metrics" @click="metrics(node)">
+                                                    <i class="bi bi-graph-up"></i>
+                                                </button>
+                                                <button class="btn btn-xs btn-light table-button ms-2" title="Logs" @click="logs(node)">
+                                                    <i class="bi bi-binoculars"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-h-100">
+                        <div class="d-flex card-header justify-content-between align-items-center">
+                            <h4 class="header-title">CPU Usage of active clusters</h4>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div id="chart">
+                                <apexchart width="100%" type="radialBar" :options="chartOptionsCPU" :series="seriesCPU"></apexchart>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card card-h-100">
+                        <div class="d-flex card-header justify-content-between align-items-center">
+                            <h4 class="header-title">Memory Usage of active clusters</h4>
+                        </div>
+                        <div class="card-body pt-0">
+                            <div>
+                                <apexchart width="100%" type="radialBar" :options="chartOptionsMemory" :series="seriesMEM"></apexchart>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -5,6 +5,8 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 
+import VueApexCharts from 'vue3-apexcharts'
+
 import { Notyf } from 'notyf'
 import 'notyf/notyf.min.css'
 
@@ -52,6 +54,8 @@ app.provide('notyf', new Notyf({
         }
     ]
 }))
+
+app.use(VueApexCharts)
 
 app.use(createPinia())
 app.use(router)
