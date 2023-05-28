@@ -41,7 +41,7 @@ class Helper
             return $response->getBody()->getContents();
 
         } catch (ConnectException $e) {
-            throw new \Exception("Request timeout. Please verify the router connection.", 504); // Gateway Timeout
+            throw new \Exception("Request timeout. Please verify the master node connection.", 504); // Gateway Timeout
         } catch (RequestException $e) {
             throw new \Exception("Request malformed. Please verify your request.", 400); // Bad Request
         } catch (ServerException $e) {
